@@ -38,13 +38,13 @@ export function onListening() {
   console.log(`Listening on ${bind}`);
 }
 
-export function handle4040(req, res, next) {
+export function handle404(req, res, next) {
   const err = new erro("Not Found");
   err.status = 404;
   next(err);
 }
 
-export function basicHandler(err, req, res, next) {
+export function basicErrorHandler(err, req, res, next) {
   // Defer to built-in error handler if headersSent
   // See: http://expressjs.com/en/guide/error-handling.html
   if (res.headersSent) {

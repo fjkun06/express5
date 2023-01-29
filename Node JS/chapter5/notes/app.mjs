@@ -8,13 +8,13 @@ import { default as bodyParser } from "body-parser";
 import * as http from "http";
 import { approotdir } from "./approotdir.mjs";
 const __dirname = approotdir;
-import { normalizePort, onError, onListening, handle404, basicErrorHandler } from "./app.js";
+import { normalizePort, onError, onListening, handle404, basicErrorHandler } from "./appsupport.mjs";
 import { router as indexRouter } from "./routes/index.mjs";
 import { InMemoryNotesstore } from "./models/notes-memory.mjs";
-// import { router as notesRouter } from './routes/notes.mjs';
+import { router as notesRouter } from './routes/notes.mjs';
 
 export const app = express();
-const NotesStore = new InMemoryNotesstore();
+export const NotesStore = new InMemoryNotesstore();
 
 //view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -22,7 +22,6 @@ app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "partials"));
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,7 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //Router function lists
 app.use("/", indexRouter);
-//app.use('/notes', notesRouter)
+app.use('/notes', notesRouter)
 
 //error handlers
 //catch 404 and forward to error handler

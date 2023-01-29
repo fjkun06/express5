@@ -4,9 +4,9 @@ const __note_body = Symbol("body");
 
 export class Note {
   constructor(key, title, body) {
-    this["note_key"] = key;
-    this["note_title"] = title;
-    this["note_body"] = body;
+    this[__note_key] = key;
+    this[__note_title] = title;
+    this[__note_body] = body;
   }
 
   get key() {
