@@ -10,9 +10,11 @@ import { approotdir } from "./approotdir.mjs";
 const __dirname = approotdir;
 import { normalizePort, onError, onListening, handle404, basicErrorHandler } from "./app.js";
 import { router as indexRouter } from "./routes/index.mjs";
+import { InMemoryNotesstore } from "./models/notes-memory.mjs";
 // import { router as notesRouter } from './routes/notes.mjs';
 
 export const app = express();
+const NotesStore = new InMemoryNotesstore();
 
 //view engine setup
 app.set("views", path.join(__dirname, "views"));
