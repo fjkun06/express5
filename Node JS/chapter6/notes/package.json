@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=notes:* node ./app.mjs",
-    "monitor1": "SET PORT=3001 && nodemon --watch ./app.mjs --watch ./public/* ./routes/* ./models/*",
+    "start": "cross-env REQUEST_LOG_FILE=log.txt REQUEST_LOG_FORMAT='common'  DEBUG=notes:* node ./app.mjs",
+    "monitor1": "SET REQUEST_LOG_FILE=log.txt && SET REQUEST_LOG_FORMAT='common' && SET PORT=3001 && nodemon --watch ./app.mjs --watch ./public/* ./routes/* ./models/*",
     "monitor2": "SET PORT=3002 && nodemon --watch ./app.mjs --watch ./public/* ./routes/* ./models/*"
   },
   "dependencies": {
