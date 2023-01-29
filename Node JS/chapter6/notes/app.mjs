@@ -14,6 +14,12 @@ import { router as indexRouter } from "./routes/index.mjs";
 import { InMemoryNotesstore } from "./models/notes-memory.mjs";
 import { router as notesRouter } from "./routes/notes.mjs";
 import { default as rfs } from "rotating-file-stream";
+import { default as DBG } from 'debug';
+
+//debugging is enabled
+export const debug = DBG('notes:debug');
+export const dbgerror = DBG('notes:error');
+
 
 export const app = express();
 export const NotesStore = new InMemoryNotesstore();
@@ -51,9 +57,8 @@ app.use(
 );
 
 if (process.env.REQUEST_LOG_FILE) {
-  app.use(logger(process.env.REQUEST_LOG_FORMAT || 'dev'));
- }
- 
+  app.use(logger(process.env.REQUEST_LOG_FORMAT || "dev"));
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -77,3 +82,7 @@ export const server = http.createServer(app);
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+server.on("request", (req, res) => {
+  debug(`${new Date().toISOString()} request ${req.method}
+ ${req.url}`);
+});

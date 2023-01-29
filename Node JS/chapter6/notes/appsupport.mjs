@@ -1,4 +1,5 @@
-import { port as defaultPort, server } from "./app.mjs";
+import { dbgerror, debug, port as defaultPort, server } from "./app.mjs";
+import * as util from "util";
 
 export function normalizePort(value) {
   const port = parseInt(value, 10);
@@ -13,6 +14,7 @@ export function normalizePort(value) {
 }
 
 export function onError(err) {
+  dbgerror(err);
   if (err.syscall !== "listen") {
     throw err;
   }
@@ -35,7 +37,8 @@ export function onError(err) {
 export function onListening() {
   const addr = server.address();
   const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  console.log(`Listening on ${bind}`);
+  debug(`Listening on ${bind}`);
+  // console.log(`Listening on ${bind}`);
 }
 
 export function handle404(req, res, next) {
@@ -57,3 +60,13 @@ export function basicErrorHandler(err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 }
+
+//catching unhandled errors
+process.on("uncaughtException", function (err) {
+  console.error(`I've crashed!!! - ${err.stack || err}`);
+});
+
+process.on("unhandledRejection", (reason, p) => {
+  console.error(`Unhandled Rejection at: ${util.inspect(p)} reason:
+ ${reason}`);
+});
