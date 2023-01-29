@@ -1,6 +1,8 @@
 import { AbstractNotesStore, Note } from "./Notes.mjs";
 
 const notes = [];
+notes["schneider"] = new Note("schneider", "Schneider", "She a real vixen and she is in Mamfe rn.");
+notes["nance"] = new Note("nance", "Nance", "She a real troublemaker and she is in a hospital rn.");
 
 export class InMemoryNotesstore extends AbstractNotesStore {
   async close() {}
@@ -15,6 +17,10 @@ export class InMemoryNotesstore extends AbstractNotesStore {
     notes[key] = new Note(key, title, body);
     // console.log(notes);
     return notes[key];
+  }
+  async copy() {
+    return notes;
+    // return notes['nance'];
   }
   async read(key) {
     // console.log(notes);

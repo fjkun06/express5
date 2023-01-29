@@ -6,6 +6,7 @@ import { default as logger } from "morgan";
 import { default as cookieParser } from "cookie-parser";
 import { default as bodyParser } from "body-parser";
 import * as http from "http";
+import {default as cors} from "cors";
 import { approotdir } from "./approotdir.mjs";
 const __dirname = approotdir;
 import { normalizePort, onError, onListening, handle404, basicErrorHandler } from "./appsupport.mjs";
@@ -21,6 +22,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 hbs.registerPartials(path.join(__dirname, "partials"));
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

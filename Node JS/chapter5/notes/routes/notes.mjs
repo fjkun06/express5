@@ -58,6 +58,28 @@ router.get("/edit", async (req, res, next) => {
     next(error);
   }
 });
+//Send note (data)
+router.get("/data", async (req, res, next) => {
+  // const note = await notes.read(req.query.key);
+  try {
+    const keylist = await notes.keylist();
+    // console.log(`keylist ${util.inspect(keylist)}`);
+    const keyPromises = keylist.map((key) => {
+      return notes.read(key);
+    });
+    const notelist = await Promise.all(keyPromises);
+    // console.log(util.inspect(notelist));
+
+    // res.render("index", { title: "Notes", notelist: notelist });
+
+    if (notelist.length > 0) {
+      // if (notelist.length > 0 && Object.keys(notelist[0]).length > 0) {
+      res.send({ title: "Notes", notelist: notelist });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 
 //Delete note (destroy)
 router.get("/destroy", async (req, res, next) => {
@@ -73,7 +95,7 @@ router.get("/destroy", async (req, res, next) => {
       note: note,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -81,8 +103,7 @@ router.get("/destroy", async (req, res, next) => {
 router.post("/destroy/confirm", async (req, res, next) => {
   try {
     await notes.destroy(req.body.notekey);
-    res.redirect("/")
-
+    res.redirect("/");
   } catch (error) {
     next(error);
   }

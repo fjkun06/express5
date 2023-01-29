@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "start": "cross-env DEBUG=notes:* node ./app.mjs",
-    "monitor":"nodemon --watch ./app.mjs --watch ./routes/* ./models/*"
+    "monitor1": "SET PORT=3001 && nodemon --watch ./app.mjs --watch ./public/* ./routes/* ./models/*"
+    ,"monitor2": "SET PORT=3002 && nodemon --watch ./app.mjs --watch ./public/* ./routes/* ./models/*"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "debug": "~2.6.9",
     "express": "~4.16.1",
