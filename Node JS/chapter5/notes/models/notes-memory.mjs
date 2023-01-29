@@ -7,32 +7,31 @@ export class InMemoryNotesstore extends AbstractNotesStore {
 
   async update(key, title, body) {
     notes[key] = new Note(key, title, body);
-    console.log(notes);
+    // console.log(notes);
 
     return notes[key];
   }
   async create(key, title, body) {
     notes[key] = new Note(key, title, body);
-    console.log(notes);
+    // console.log(notes);
     return notes[key];
-
   }
   async read(key) {
-    console.log(notes);
+    // console.log(notes);
 
     if (notes[key]) return notes[key];
     else throw new Error(`Note ${key} doesn't exist`);
   }
 
-  async delete(key) {
-    console.log(notes);
+  async destroy(key) {
+    console.log("notes: ", notes);
 
     if (notes[key]) delete notes[key];
     else throw new Error(`Note ${key} doesn't exist`);
   }
 
   async keylist() {
-    console.log(notes);
+    // console.log(notes);
 
     return Object.keys(notes);
   }

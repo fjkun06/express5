@@ -24,12 +24,10 @@ router.post("/save", async (req, res, next) => {
       // note = await notes.update(req.body.notekey, req.body.title, req.body.body);
     }
     // res.redirect("http://localhost:3000");
-    res.redirect('/notes/view?key='+ req.body.notekey)
+    res.redirect("/notes/view?key=" + req.body.notekey);
   } catch (err) {
     next(err);
   }
-  // res.send(req.body);
-
 });
 
 //Read Note
@@ -44,6 +42,48 @@ router.get("/view", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  // res.send(req.body);
+});
 
+//Edit note (update)
+router.get("/edit", async (req, res, next) => {
+  try {
+    const note = await notes.read(req.query.key);
+    res.render("noteedit", {
+      title: note ? "Edit " + note.title : "Add a Note",
+      docreate: false,
+      notekey: req.query.key,
+      note: note,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//Delete note (destroy)
+router.get("/destroy", async (req, res, next) => {
+  try {
+    // await notes.destroy(req.query.key);
+    // res.redirect("http://localhost:3000");
+    // res.end();
+
+    const note = await notes.read(req.query.key);
+    res.render("notedestroy", {
+      title: note ? note.title : "",
+      notekey: req.query.key,
+      note: note,
+    });
+  } catch (error) {
+    next(error)
+  }
+});
+
+//Really destroy note
+router.post("/destroy/confirm", async (req, res, next) => {
+  try {
+    await notes.destroy(req.body.notekey);
+    res.redirect("/")
+
+  } catch (error) {
+    next(error);
+  }
 });
