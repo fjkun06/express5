@@ -4,7 +4,7 @@ const notes = [];
 notes["schneider"] = new Note("schneider", "Schneider", "She a real vixen and she is in Mamfe rn.");
 notes["nance"] = new Note("nance", "Nance", "She a real troublemaker and she is in a hospital rn.");
 
-export class InMemoryNotesstore extends AbstractNotesStore {
+export default class InMemoryNotesStore extends AbstractNotesStore {
   async close() {}
 
   async update(key, title, body) {

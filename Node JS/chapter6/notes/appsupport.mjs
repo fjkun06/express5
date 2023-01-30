@@ -1,5 +1,6 @@
 import { dbgerror, debug, port as defaultPort, server } from "./app.mjs";
 import * as util from "util";
+import { NotesStore } from './models/notes-store.mjs';
 
 export function normalizePort(value) {
   const port = parseInt(value, 10);
@@ -29,6 +30,11 @@ export function onError(err) {
       console.error(`${bind} already in use`);
       process.exit(1);
       break;
+    case "ENOTESSTORE":
+      console.error(`Notes data store initialization failure because `, error.error);
+      process.exit(1);
+      break;
+
     default:
       throw err;
   }
@@ -70,3 +76,16 @@ process.on("unhandledRejection", (reason, p) => {
   console.error(`Unhandled Rejection at: ${util.inspect(p)} reason:
  ${reason}`);
 });
+
+//closing db connection
+async function catchProcessDeath() {
+  debug('urk...');
+ await NotesStore.close();
+  server.close();
+  process.exit(0);
+ }
+ process.on('SIGTERM', catchProcessDeath);
+ process.on('SIGINT', catchProcessDeath);
+ process.on('SIGHUP', catchProcessDeath);
+ process.on('exit', () => { debug('exiting...'); });
+ 

@@ -9,6 +9,30 @@ export class Note {
     this[__note_body] = body;
   }
 
+  get JSON() {
+    return JSON.stringify({
+      key: this.key,
+      title: this.title,
+      body: this.body,
+    });
+  }
+  static fromJSON(json) {
+    const data = JSON.parse(json);
+    if (
+      typeof data !== "object" ||
+      !data.hasOwnProperty("key") ||
+      typeof data.key !== "string" ||
+      !data.hasOwnProperty("title") ||
+      typeof data.title !== "string" ||
+      !data.hasOwnProperty("body") ||
+      typeof data.body !== "string"
+    ) {
+      throw new Error(`Not a Note: ${json}`);
+    }
+    const note = new Note(data.key, data.title, data.body);
+    return note;
+  }
+
   get key() {
     return this[__note_key];
   }

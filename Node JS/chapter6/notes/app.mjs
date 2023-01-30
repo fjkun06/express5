@@ -11,19 +11,20 @@ import { approotdir } from "./approotdir.mjs";
 const __dirname = approotdir;
 import { normalizePort, onError, onListening, handle404, basicErrorHandler } from "./appsupport.mjs";
 import { router as indexRouter } from "./routes/index.mjs";
-import { InMemoryNotesstore } from "./models/notes-memory.mjs";
 import { router as notesRouter } from "./routes/notes.mjs";
 import { default as rfs } from "rotating-file-stream";
 import { default as DBG } from 'debug';
-
+import { useModel as useNotesModel } from './models/notes-store.mjs';
 //debugging is enabled
 export const debug = DBG('notes:debug');
 export const dbgerror = DBG('notes:error');
 
 
 export const app = express();
-export const NotesStore = new InMemoryNotesstore();
-
+useNotesModel(process.env.NOTES_MODEL ? process.env.NOTES_MODEL : 'memory')
+ .then(store => { })
+ .catch(error => { onError({ code: 'ENOTESSTORE', error }); });
+ 
 //view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
