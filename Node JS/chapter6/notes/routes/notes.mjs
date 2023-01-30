@@ -1,6 +1,8 @@
 // const util = require('util');
 import { default as express } from "express";
 import { NotesStore as notes } from "../models/notes-store.mjs";
+import { debug } from "../app.mjs";
+import { xdb3 } from "../models/notes-level.mjs";
 
 export const router = express.Router();
 
@@ -61,16 +63,28 @@ router.get("/edit", async (req, res, next) => {
 //Send note (data)
 router.get("/data", async (req, res, next) => {
   try {
-    const keylist = await notes.keylist();
-    // console.log(`keylist ${util.inspect(keylist)}`);
-    const keyPromises = keylist.map((key) => {
-      return notes.read(key);
-    });
-    const notelist = await Promise.all(keyPromises)
-    // console.log(util.inspect(notelist));
+    xdb3
+      .keys({ gte: "a" })
+      .all()
+      .then((keys) => {
+        debug(keys);
+        xdb3
+          .getMany(keys)
+          .then((notes) => {
+            debug(notes);
+            res.json(notes);
+          })
+          .catch((err) => next(err));
+      })
+      .catch((err) => next(err));
 
-    res.json({ title: "Notes", notelist: notelist });
-    // res.sendStatus(200).end()
+    // xdb
+    //   .get("first")
+    //   .then((note) => {
+    //     // debug(note);
+    //     res.status(200).send({ title: "Notes", notelist: note });
+    //   })
+    //   .catch((err) => next(err));
   } catch (err) {
     next(err);
   }

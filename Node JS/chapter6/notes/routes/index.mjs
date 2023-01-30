@@ -13,6 +13,7 @@ router.get("/", async (req, res, next) => {
     const notelist = await Promise.all(keyPromises)
     // console.log(util.inspect(notelist));
 
+
     res.render("index", { title: "Notes", notelist: notelist });
   } catch (err) {
     next(err);
